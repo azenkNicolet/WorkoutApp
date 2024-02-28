@@ -44,9 +44,14 @@ class ExerciseActivity : AppCompatActivity() {
 
     private fun setUpExerciseView()
     {
-        binding?.flProgressBar?.visibility = View.INVISIBLE
-        binding?.tvTitle?.text = "Exercise Name"
-        binding?.flProgressBarExercise?.visibility = View.VISIBLE
+        binding?.flRestView?.visibility = View.INVISIBLE
+        binding?.tvTitle?.visibility = View.INVISIBLE
+        binding?.tvNext?.visibility = View.INVISIBLE
+        binding?.tvUpcoming?.visibility = View.INVISIBLE
+        binding?.tvExercise?.visibility = View.VISIBLE
+        binding?.ivImage?.visibility = View.VISIBLE
+        binding?.flExerciseView?.visibility = View.VISIBLE
+
 
         if(exerciseTimer != null)
         {
@@ -54,10 +59,23 @@ class ExerciseActivity : AppCompatActivity() {
             exerciseProgress = 0
         }
 
+        binding?.ivImage?.setImageResource(exerciseList!![currentExercisePosition].getImage())
+        binding?.tvExercise?.text = exerciseList!![currentExercisePosition].getName()
+
         setExerciseProgressBar()
     }
     private fun setUpRestView()
     {
+        binding?.flRestView?.visibility = View.VISIBLE
+        binding?.tvTitle?.visibility = View.VISIBLE
+        binding?.tvUpcoming?.visibility = View.VISIBLE
+        binding?.tvNext?.visibility = View.VISIBLE
+        binding?.tvExercise?.visibility = View.INVISIBLE
+        binding?.ivImage?.visibility = View.INVISIBLE
+        binding?.flExerciseView?.visibility = View.INVISIBLE
+
+        setUpcomingText()
+
         if(restTimer != null)
         {
             restTimer?.cancel()
@@ -65,6 +83,11 @@ class ExerciseActivity : AppCompatActivity() {
         }
 
         setRestProgressBar()
+    }
+
+    private fun setUpcomingText()
+    {
+        binding?.tvNext?.text = exerciseList!![currentExercisePosition + 1].getName()
     }
     private fun setRestProgressBar()
     {
@@ -104,10 +127,17 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                Toast.makeText(this@ExerciseActivity,
-                    "All done exercising!",
-                    Toast.LENGTH_SHORT
-                ).show()
+
+                if(currentExercisePosition < exerciseList?.size!! - 1)
+                {
+                    setUpRestView()
+                }
+                else
+                {
+                    Toast.makeText(this@ExerciseActivity,
+                    "Congratulations! You are done!",
+                    Toast.LENGTH_SHORT).show()
+                }
 
             }
 
